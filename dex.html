@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شارك واربح</title>
+    <style>
+        body {
+            background-color: #4d406e;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #ffda79;
+            text-shadow: 2px 2px 2px black;
+        }
+        p.subtitle {
+            font-size: 22px;
+            font-weight: bold;
+            color: #80ffea;
+            text-shadow: 2px 2px 2px black;
+            margin-top: 10px;
+        }
+        #remainingShares {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 2px 2px 2px black;
+            margin-top: 20px;
+        }
+        #congratulationsMessage {
+            font-size: 26px;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 2px 2px 2px black;
+            display: none;
+            margin-top: 20px;
+        }
+        #congratulationsMessage img {
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin: 20px auto;
+        }
+        .promotion-image {
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        input[type="text"], button {
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            background-color: #ffda79;
+            color: #4d406e;
+            font-weight: bold;
+            border-radius: 10px;
+            display: block;
+            margin: 20px auto;
+        }
+        label {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .notification-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #000000;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        let shareCount = 0;
+        const totalShares = 10;
+
+        function registerPhoneNumber() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            if (phoneNumber) {
+                fetch('register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phoneNumber: phoneNumber })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('linkSection').style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('يرجى إدخال رقم الهاتف.');
+            }
+        }
+
+        function shareLink() {
+            const link = "https://play.google.com/store/apps/details?id=alkahtani.yemoney";
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(link)}`;
+            window.open(whatsappUrl, '_blank');
+
+            shareCount++;
+            const remainingShares = totalShares - shareCount;
+            document.getElementById('remainingShares').textContent = `عدد المشاركات المتبقية: ${remainingShares}`;
+
+            if (shareCount >= totalShares) {
+                document.getElementById('congratulationsMessage').style.display = 'block';
+                document.getElementById('linkSection').style.display = 'none';
+                document.getElementById('applauseSound').play();
+            }
+        }
+
+        function redirectToStore() {
+            window.location.href = "https://play.google.com/store/apps/details?id=alkahtani.yemoney";
+        }
+    </script>
+</head>
+<body>
+    <h1>شارك واربح</h1>
+    <p class="subtitle">شارك الرابط إلى 10 أشخاص عبر الواتس ودخل السحب على جوائز بقيمة مليون ريال</p>
+    <div id="registrationSection">
+        <label for="phoneNumber">أدخل رقم هاتفك:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber">
+        <button onclick="registerPhoneNumber()">موافق</button>
+        <p class="notification-text">ادخل رقم جوالك ليتم التواصل معك اذا ربحت احد الجوائز</p>
+    </div>
+    <div id="linkSection" style="display:none;">
+        <p>شارك هذا الرابط مع 10 أشخاص على الواتساب للدخول في السحب:</p>
+        <p><a href="https://play.google.com/store/apps/details?id=alkahtani.yemoney">https://play.google.com/store/apps/details?id=alkahtani.yemoney</a></p>
+        <button onclick="shareLink()">شارك على الواتساب</button>
+        <p id="remainingShares">عدد المشاركات المتبقية: 10</p>
+    </div>
+    <div id="congratulationsMessage">
+        <p>🥳🥳 مبروك تم دخولك السحب نتمنا ان تكون من الفائزين 🥳🥳</p>
+        <img src="https://example.com/flower.png" alt="ورد">
+    </div>
+    <audio id="applauseSound" src="https://example.com/applause.mp3"></audio>
+    <img src="https://f.top4top.io/p_3115dzkt30.jpg" alt="Promotion Image" class="promotion-image" onclick="redirectToStore()">
+</body>
+</html>
